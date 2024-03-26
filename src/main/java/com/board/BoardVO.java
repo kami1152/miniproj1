@@ -11,7 +11,7 @@ public class BoardVO {
 	private int bno;
 	private String btitle;
 	private String bcontent;
-	private String bwriter;
+	private String bwriter = "임시 세션 사용자";
 	private Date bdate;
 	
 	private int views;

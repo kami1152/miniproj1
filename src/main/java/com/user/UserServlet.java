@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.user.UserVO;
 
@@ -61,6 +62,7 @@ public class UserServlet extends HttpServlet {
 
 		ObjectMapper objectMapper = new ObjectMapper();
 		UserVO userVO = null;
+		objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 		if(contentType == null || contentType.startsWith("application/x-www-form-urlencoded")) {
 			userVO = objectMapper.convertValue(convertMap(request.getParameterMap()), UserVO.class);
 		}else if (contentType.startsWith("application/json")){
@@ -78,10 +80,9 @@ public class UserServlet extends HttpServlet {
 		case "update" -> userController.update(request, userVO);
 		case "insertForm" -> userController.insertForm(request);
 		case "insert" -> userController.insert(request, userVO);
-		//case "existUserId" -> userController.existUserId(request, userVO);
-		//case "loginForm" -> userController.loginForm(request);
-		//case "login" -> userController.login(request, userVO,response);
-		//case "logout" -> userController.logout(request);
+		case "loginForm" -> userController.loginForm(request);
+		case "login" -> userController.login(request, userVO,response);
+		case "logout" -> userController.logout(request);
 		//case "mypage" -> userController.mypage(request, userVO);
 		default -> "";
 		};

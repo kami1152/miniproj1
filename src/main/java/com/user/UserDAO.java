@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.Secret;
+import com.user.UserVO;
 
 public class UserDAO implements Secret {
 
@@ -57,7 +58,7 @@ public class UserDAO implements Secret {
 	public UserVO view(UserVO user) {
 		UserVO u = new UserVO();
 		try {
-			String sql = "select * from user where user_id = ?";
+			String sql = "select user_id,username,email,password,created_at,age,hobby from user where user_id = ?";
 			Pstmt = conn.prepareStatement(sql);
 			Pstmt.setString(1, user.getUserid());
 			rs = Pstmt.executeQuery();
@@ -124,26 +125,81 @@ public class UserDAO implements Secret {
 			Pstmt.setInt(5, user.getUserage());
 			Pstmt.setString(6, user.getUserhobby());
 			res = Pstmt.executeUpdate();
-		}  catch (SQLException e) {
+		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 
 		return res;
 	}
+
 	public boolean idcheck(UserVO user) {
 		try {
 			String sql = "select * from user where user_id = ?";
 			Pstmt = conn.prepareStatement(sql);
 			Pstmt.setString(1, user.getUserid());
 			rs = Pstmt.executeQuery();
-			if(rs.next()) {
+			if (rs.next()) {
 				return false;
 			}
-		}catch(SQLException e) {
+		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 		return true;
-		
-		
+
 	}
+
+	public UserVO login(UserVO user) {
+		UserVO u = new UserVO();
+		try {
+			String sql = "SELECT user_id, username, email, password, created_at, age, hobby, uuid FROM user WHERE user_id =? AND password = ?";
+			Pstmt = conn.prepareStatement(sql);
+			Pstmt.setString(1, user.getUserid());
+			Pstmt.setString(2, user.getUserpassword());
+			rs = Pstmt.executeQuery();
+
+			if (rs.next()) {
+				u.setUserid(rs.getString("user_id"));
+				u.setUsername(rs.getString("username"));
+				u.setUseremail(rs.getString("email"));
+				u.setUserpassword(rs.getString("password"));
+				u.setUserdate(rs.getDate("created_at"));
+				u.setUserage(rs.getInt("age"));
+				u.setUserhobby(rs.getString("hobby"));
+				u.setUseruuid(rs.getString("uuid"));
+			} else {
+				return null;
+			}
+			rs.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return u;
+	}
+
+	public UserVO getUserVOFromUUID(UserVO user) {
+
+		UserVO u = new UserVO();
+
+		try {
+			String sql = "select user_id,username,email,password,created_at,age,hobby from user where uuid = ?";
+			Pstmt.setString(1, user.getUseruuid());
+
+			ResultSet rs = Pstmt.executeQuery();
+			if (rs.next()) {
+				u.setUserid(rs.getString("user_id"));
+				u.setUsername(rs.getString("username"));
+				u.setUseremail(rs.getString("email"));
+				u.setUserpassword(rs.getString("password"));
+				u.setUserdate(rs.getDate("created_at"));
+				u.setUserage(rs.getInt("age"));
+				u.setUserhobby(rs.getString("hobby"));
+			}
+			rs.close();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return u;
+	}
+
 }

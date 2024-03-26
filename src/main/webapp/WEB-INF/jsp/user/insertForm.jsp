@@ -37,33 +37,41 @@
 	margin-right: 10px;
 }
 
-    .dupbtn {
-        background-color: transparent;
-        color: white;
-        border: 2px solid white;
-        border-radius: 15px;
-        padding: 5px 10px; 
-        font-weight: bold;
-        font-size: 14px; 
-        cursor: pointer;
-        transition: all 0.3s ease;
-    }
+.dupbtn {
+	background-color: transparent;
+	color: white;
+	border: 2px solid white;
+	border-radius: 15px;
+	padding: 5px 10px;
+	font-weight: bold;
+	font-size: 14px;
+	cursor: pointer;
+	transition: all 0.3s ease;
+}
 
-    .dupbtn:hover {
-        background-color: white;
-        color: black;
-    }
+.dupbtn:hover {
+	background-color: white;
+	color: black;
+}
 </style>
 
 </head>
 <body>
-	<div id="navigation" style="margin-bottom: 25px"></div>
+
+	<c:if test="${loginVO.username != null}">
+		<div id="navigation2"></div>
+		<label>로그인 유저 : ${loginVO.username}</label>
+	</c:if>
+	<c:if test="${loginVO.username == null}">
+		<div id="navigation"></div>
+	</c:if>
 	<h2>회원 가입 화면</h2>
 	<form id="rForm" action="user.do" method="post">
 		<input type="hidden" name="action" value="insert">
 		<table border="1">
 			<tr>
-				<th style="text-align: center;">userid : <input type="button" id="duplicateId" value="중복확인" class="dupbtn"></th>
+				<th style="text-align: center;">userid : <input type="button"
+					id="duplicateId" value="중복확인" class="dupbtn"></th>
 				<th>username</th>
 				<th>userpassword</th>
 				<th>useremail</th>
@@ -85,11 +93,12 @@
 		</table>
 		<div class="hobby_box">
 			<label style="margin-right: 10px;">취미 : </label> <input type="radio"
-				id="userhobby" name="userhobby" value="축구"><label for="축구">축구</label> <input
-				type="radio" id="userhobby" name="userhobby" value="게임"><label for="게임">게임</label>
-			<input type="radio" id="userhobby" name="userhobby" value="영화"><label
-				for="영화">영화</label>
-		</div><br>
+				id="userhobby" name="userhobby" value="축구"><label for="축구">축구</label>
+			<input type="radio" id="userhobby" name="userhobby" value="게임"><label
+				for="게임">게임</label> <input type="radio" id="userhobby"
+				name="userhobby" value="영화"><label for="영화">영화</label>
+		</div>
+		<br>
 		<button type="submit" class="custom-button">확인</button>
 		<button type="button" onclick="redirectToUserPage('${user.userid}')"
 			class="custom-button">취소</button>
@@ -151,16 +160,7 @@ duplicateId.addEventListener("click", () => {
 	});
 });
 
-window.addEventListener('DOMContentLoaded', function() {
-	  fetch('navigation.html')
-	    .then(response => response.text())
-	    .then(data => {
-	      document.getElementById('navigation').innerHTML = data;
-	    })
-	    .catch(error => {
-	      console.error('네비게이션 로드 중 오류가 발생했습니다:', error);
-	    });
-	});
+
 
 </script>
 </body>

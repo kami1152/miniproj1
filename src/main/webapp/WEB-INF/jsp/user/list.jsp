@@ -12,10 +12,17 @@
 </head>
 <body>
 
-	<div id="navigation"></div>
+	<c:if test="${loginVO.username != null}">
+		<div id="navigation2"></div>
+		<label>로그인 유저 : ${loginVO.username}</label>
+	</c:if>
+	<c:if test="${loginVO.username == null}">
+		<div id="navigation"></div>
+	</c:if>
 	<h1>회원목록</h1>
 
-	<form id="searchForm" action="user.do" method="get" style="margin-bottom: 20px;">
+	<form id="searchForm" action="user.do" method="get"
+		style="margin-bottom: 20px;">
 		<label>이름 : </label> <input type="text" id="searchKey"
 			name="searchKey" value="${param.searchKey}"> <input
 			type="submit" value="검색">
@@ -42,40 +49,29 @@
 			</tr>
 		</c:forEach>
 	</table>
-	
-	
+
+
 	<form id="insertForm" method="post" action="user.do">
 		<input type="hidden" id="action" name="action" value="insertForm">
-		<input type="button" value="등록" onclick="jsinsertForm()"class="custom-button">
+		<input type="button" value="등록" onclick="jsinsertForm()"
+			class="custom-button">
 	</form>
-	
+
+	<script type="text/javascript" src="<c:url value='/js/common.js'/>"></script>
 	<script>
-function jsView(uid) {
-	//인자의 값을 설정한다 
-	userid.value = uid;
-	
-	//양식을 통해서 서버의 URL로 값을 전달한다
-	listForm.submit();
-	
-}
+		function jsView(uid) {
+			//인자의 값을 설정한다 
+			userid.value = uid;
 
-function jsinsertForm(){
-	insertForm.submit();
-}
-//네비게이션 로드
-window.addEventListener('DOMContentLoaded', function() {
-  fetch('navigation.html')
-    .then(response => response.text())
-    .then(data => {
-      document.getElementById('navigation').innerHTML = data;
-    })
-    .catch(error => {
-      console.error('네비게이션 로드 중 오류가 발생했습니다:', error);
-    });
-});
+			//양식을 통해서 서버의 URL로 값을 전달한다
+			listForm.submit();
 
+		}
 
-</script>
+		function jsinsertForm() {
+			insertForm.submit();
+		}
+	</script>
 
 </body>
 </html>

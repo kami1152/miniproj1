@@ -13,7 +13,13 @@
 
 </head>
 <body>
-	<div id="navigation"></div>
+	<c:if test="${loginVO.username != null}">
+		<div id="navigation2"></div>
+		<label>로그인 유저 : ${loginVO.username}</label>
+	</c:if>
+	<c:if test="${loginVO.username == null}">
+		<div id="navigation"></div>
+	</c:if>
 	<h2>test user list</h2>
 	<table border="1">
 		<tr>
@@ -40,8 +46,8 @@
 			type="hidden" id="userid" name="userid" value="${user.userid}">
 		<input type="button" value="수정" onclick="jsUpdateForm()"
 			class="custom-button"> <input type="button" value="삭제"
-			onclick="jsDelete()" class="custom-button">
-			 <input type="button" value="목록" onclick="jsback()" class="custom-button">
+			onclick="jsDelete()" class="custom-button"> <input
+			type="button" value="목록" onclick="jsback()" class="custom-button">
 	</form>
 
 	<script type="text/javascript" src="<c:url value='/js/common.js'/>"></script>
@@ -77,16 +83,6 @@ function jsUpdateForm() {
 		viewForm.submit();
 	}	
 }
-window.addEventListener('DOMContentLoaded', function() {
-	  fetch('navigation.html')
-	    .then(response => response.text())
-	    .then(data => {
-	      document.getElementById('navigation').innerHTML = data;
-	    })
-	    .catch(error => {
-	      console.error('네비게이션 로드 중 오류가 발생했습니다:', error);
-	    });
-	});
 
 
 </script>

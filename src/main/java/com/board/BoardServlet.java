@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -11,12 +12,14 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.board.BoardController;
 import com.board.BoardVO;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.user.UserVO;
 
 public class BoardServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 
-	
+	BoardController boardController = new BoardController();
 	//BoardController BoardController = new BoardController();
 	public BoardServlet() {
 		super();
@@ -56,26 +59,49 @@ public class BoardServlet extends HttpServlet {
 		request.setCharacterEncoding("utf-8");
 		String contentType = request.getContentType();
 
-		BoardVO BoardVO = new BoardVO();
+		BoardVO BoardVO = null;
 	
+		ObjectMapper objectMapper = new ObjectMapper();
+		if(contentType == null || contentType.startsWith("application/x-www-form-urlencoded")) {
+			BoardVO  = objectMapper.convertValue(convertMap(request.getParameterMap()), BoardVO.class);
+		}else if (contentType.startsWith("application/json")){
+			BoardVO  = objectMapper.readValue(request.getInputStream(), BoardVO.class);
+		}
+	
+		
+		
+		
 		System.out.println("BoardVO " + BoardVO);
 		String action = BoardVO.getAction();
 		System.out.println(action);
 		Object result = switch (action) {
-		//case "list" -> BoardController.list(request, BoardVO);
-		//case "view" -> BoardController.view(request, BoardVO);
-		//case "delete" -> BoardController.delete(request, BoardVO);
-		//case "updateForm" -> BoardController.updateForm(request, BoardVO);
-		//case "update" -> BoardController.update(request, BoardVO);
-		//case "insertForm" -> BoardController.insertForm(request);
-		//case "insert" -> BoardController.insert(request, BoardVO);
-		//case "existBoardId" -> BoardController.existBoardId(request, BoardVO);
+		case "list" -> boardController.list(request, BoardVO);
+		case "view" -> boardController.view(request, BoardVO);
+		case "delete" -> boardController.delete(request, BoardVO);
+		case "updateForm" -> boardController.updateForm(request, BoardVO);
+		case "update" -> boardController.update(request, BoardVO);
+		case "insertForm" -> boardController.insertForm(request);
+		case "insert" -> boardController.insert(request, BoardVO);
 		//case "loginForm" -> BoardController.loginForm(request);
 		//case "login" -> BoardController.login(request, BoardVO,response);
 		//case "logout" -> BoardController.logout(request);
 		//case "mypage" -> BoardController.mypage(request, BoardVO);
 		default -> "";
 		};
+		
+		if (result instanceof Map map) {
+			// json 문자열을 리턴
+			response.setContentType("application/json;charset=UTF-8");
+			response.getWriter().append(objectMapper.writeValueAsString(map));
+		} else if (result instanceof String url) {
+			if (url.startsWith("redirect:")) {
+				// 리다이렉트
+				response.sendRedirect(url.substring("redirect:".length()));
+			} else {
+				RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/jsp/board/" + url + ".jsp");
+				rd.forward(request, response);
+			}
+		}
 
 		
 	}

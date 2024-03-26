@@ -6,9 +6,9 @@ import lombok.Data;
 
 @Data
 public class UserVO {
-	private String userid;
+	private String userid =null;
 	private String userpassword;
-	private String username;
+	private String username ;
 	
 	private String useremail;
 	private int userage;
@@ -18,6 +18,8 @@ public class UserVO {
 	private String userhobby = null;
 	
 
+	private String useruuid = null;
+	
 	
 	private String action;
 }
