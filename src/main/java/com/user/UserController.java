@@ -2,6 +2,7 @@ package com.user;
 
 import java.util.*;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -57,26 +58,24 @@ public class UserController {
 		return map;
 	}
 
-	public Object insertForm(HttpServletRequest request) {
-		// TODO Auto-generated method stub
+	public Object insertForm(HttpServletRequest request, UserVO user) {
+		List<String> list = userService.insertForm();
+		request.setAttribute("hobbylist", list);
 		return "insertForm";
 	}
 
 	public Object insert(HttpServletRequest request, UserVO user) {
 		// TODO Auto-generated method stub
 		System.out.println("insert start");
+		System.out.println("insert : " + user);
 		int res = userService.insert(user);
-		Map<String, Object> map = new HashMap<>();
-		if (res == 1) {
-			map.put("status", 0);
-		} else if (res == -1) {
-			map.put("status", -98);
-			map.put("statusMessage", "이미 존재하는 아이디 입니다.");
-		} else {
-			map.put("status", -99);
-			map.put("statusMessage", "회원 가입이 실패하였습니다");
+		request.setAttribute("msg", String.valueOf(res));
+		if(res == 1) {
+			return "redirect:board.do?action=list";	
+		}else {
+			return "redirect:user.do?action=lnsertForm&err=invalidUserId";
 		}
-		return map;
+		
 	}
 
 	public Object loginForm(HttpServletRequest request) {
@@ -97,21 +96,50 @@ public class UserController {
 			HttpSession session = request.getSession();
 			session.setAttribute("loginVO", loginVO);
 			session.setMaxInactiveInterval(30 * 60 * 1000);
+			
+			// uuid 구현
+			if (userVO.getAutologin().equals("Y")) {
+				String uuid = UUID.randomUUID().toString();
+				userVO.setUseruuid(uuid);
+				userService.updateUUID(userVO);
+				System.out.println("good autologin set:"+userVO);
+				Cookie uuidCookie = new Cookie("uuidCookie", uuid);
+				uuidCookie.setMaxAge(24 * 60 * 60); // 24시간
+				uuidCookie.setPath("/");
+
+				response.addCookie(uuidCookie);
+			}
 			return "redirect:board.do?action=list";
 		}
 
 		return "redirect:user.do?action=loginForm&err=invalidUserId";
 	}
 
-	public Object logout(HttpServletRequest request) {
+	public Object logout(HttpServletRequest request, HttpServletResponse response) {
 		Map<String, Object> map = new HashMap<>();
 		HttpSession session = request.getSession();
 		UserVO loginVO = (UserVO) session.getAttribute("loginVO");
+		System.out.println("logout: "+loginVO);
 		loginVO.setUseruuid("");
+		Cookie cookie = new Cookie("uuidCookie", null);
+		cookie.setMaxAge(0);
+		response.addCookie(cookie);
+		userService.updateUUID(loginVO);
 		session.removeAttribute("loginVO");
 		session.invalidate();
 		map.put("status", 0);
 		return map;
+	}
+
+	public Object mypage(HttpServletRequest request, UserVO userVO) {
+		// TODO Auto-generated method stub
+		return "mypage";
+	}
+
+	public Object mypagehome(HttpServletRequest request, UserVO userVO) {
+		
+		request.setAttribute("user", userService.view(userVO));
+		return "mypagehome";
 	}
 
 }

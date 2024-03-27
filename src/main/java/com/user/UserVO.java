@@ -1,6 +1,8 @@
 package com.user;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.*;
 
 import lombok.Data;
 
@@ -14,10 +16,11 @@ public class UserVO {
 	private int userage;
 	private Date userdate;
 	
+	private String userhobby;
 	
-	private String userhobby = null;
+	private Queue<String> userhobbies;
 	
-
+	private String autologin = "N";
 	private String useruuid = null;
 	
 	

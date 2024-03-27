@@ -40,4 +40,18 @@ public class UserService {
 		return u;
 	}
 
+	public void updateUUID(UserVO userVO) {
+	
+		userDAO.updateUUID(userVO);
+		
+	}
+
+	public List<String> insertForm() {
+		
+		return userDAO.hobbyList();
+		
+		
+		
+	}
+
 }

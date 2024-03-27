@@ -20,7 +20,7 @@
 	<c:if test="${loginVO.username == null}">
 		<div id="navigation"></div>
 	</c:if>
-	<h2>상세 정보</h2>
+	<h2>test user list</h2>
 	<table border="1">
 		<tr>
 			<th>userid</th>

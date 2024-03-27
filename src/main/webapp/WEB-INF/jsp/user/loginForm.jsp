@@ -57,7 +57,7 @@
 
 </head>
 <body>
-	<c:if test="${loginVO.username != null}">
+<c:if test="${loginVO.username != null}">
 		<div id="navigation2"></div>
 		<label>로그인 유저 : ${loginVO.username}</label>
 	</c:if>
@@ -80,6 +80,8 @@
 					value="" required="required"></td>
 			</tr>
 		</table>
+		<input type="checkbox" id="autologin" name="autologin" value="Y">
+		<label for="checkbox">자동 로그인</label><br>
 		<button type="submit" class="custom-button">확인</button>
 		<button type="button" onclick="redirectToUserPage('${user.userid}')"
 			class="custom-button">취소</button>

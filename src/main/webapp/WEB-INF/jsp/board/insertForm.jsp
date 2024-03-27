@@ -102,7 +102,7 @@ body {
 	});
 	function redirectToUserPage(bno){
 		if(confirm("작성을 취소하시겠습니까?")){
-	    var url = 'board.do?action=view&bno=' + bno;
+	    var url = 'board.do?action=list';
 	    window.location.href = url;
 	    }
 	}

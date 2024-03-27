@@ -3,6 +3,7 @@ package com.user;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Queue;
 
 import com.Secret;
 import com.user.UserVO;
@@ -57,9 +58,12 @@ public class UserDAO implements Secret {
 
 	public UserVO view(UserVO user) {
 		UserVO u = new UserVO();
+		List<String> hobbys = new ArrayList<String>();
 		try {
-			String sql = "select user_id,username,email,password,created_at,age,hobby from user where user_id = ?";
-			Pstmt = conn.prepareStatement(sql);
+			String nsql = "SELECT u.user_id, u.username, u.email, u.password, u.created_at, u.age, GROUP_CONCAT(uh.hobby) AS hobbies FROM `user` u LEFT JOIN userhobby uh ON u.user_id = uh.user_id where u.user_id = ? GROUP BY u.user_id";
+			// String sql = "select user_id,username,email,password,created_at,age from user
+			// where user_id = ?";
+			Pstmt = conn.prepareStatement(nsql);
 			Pstmt.setString(1, user.getUserid());
 			rs = Pstmt.executeQuery();
 			if (rs.next()) {
@@ -67,11 +71,12 @@ public class UserDAO implements Secret {
 				u.setUsername(rs.getString("username"));
 				u.setUseremail(rs.getString("email"));
 				u.setUserpassword(rs.getString("password"));
+				u.setUserhobby(rs.getString("hobbies"));
 				u.setUserdate(rs.getDate("created_at"));
 				u.setUserage(rs.getInt("age"));
-				u.setUserhobby(rs.getString("hobby"));
 			}
 			rs.close();
+			System.out.println(u);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -96,13 +101,12 @@ public class UserDAO implements Secret {
 	public int update(UserVO user) {
 		int res = 0;
 		try {
-			String sql = "update user set username=?, password=?, email=?, age=?, hobby=? where user_id = ?";
+			String sql = "update user set username=?, password=?, email=?, age=? where user_id = ?";
 			Pstmt = conn.prepareStatement(sql);
 			Pstmt.setString(1, user.getUsername());
 			Pstmt.setString(2, user.getUserpassword());
 			Pstmt.setString(3, user.getUseremail());
 			Pstmt.setInt(4, user.getUserage());
-			Pstmt.setString(5, user.getUserhobby());
 			Pstmt.setString(6, user.getUserid());
 			res = Pstmt.executeUpdate();
 
@@ -116,15 +120,23 @@ public class UserDAO implements Secret {
 	public int insert(UserVO user) {
 		int res = 0;
 		try {
-			String sql = "insert into user (user_id, username, email, password, age, hobby) values(?,?,?,?,?,?)";
+			String sql = "insert into user (user_id, username, email, password, age ) values(?,?,?,?,?)";
 			Pstmt = conn.prepareStatement(sql);
 			Pstmt.setString(1, user.getUserid());
 			Pstmt.setString(2, user.getUsername());
 			Pstmt.setString(3, user.getUseremail());
 			Pstmt.setString(4, user.getUserpassword());
 			Pstmt.setInt(5, user.getUserage());
-			Pstmt.setString(6, user.getUserhobby());
 			res = Pstmt.executeUpdate();
+			Queue<String> hobbies = user.getUserhobbies();
+			String sql2 = "insert into userhobby (user_id, hobby) values (?,?)";
+			while(!hobbies.isEmpty()) {
+				String hobby = hobbies.poll();
+				Pstmt = conn.prepareStatement(sql2);
+				Pstmt.setString(1, user.getUserid());
+				Pstmt.setString(2, hobby);
+				Pstmt.executeUpdate();
+			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -151,7 +163,7 @@ public class UserDAO implements Secret {
 	public UserVO login(UserVO user) {
 		UserVO u = new UserVO();
 		try {
-			String sql = "SELECT user_id, username, email, password, created_at, age, hobby, uuid FROM user WHERE user_id =? AND password = ?";
+			String sql = "SELECT user_id, username, email, password, created_at, age, uuid FROM user WHERE user_id =? AND password = ?";
 			Pstmt = conn.prepareStatement(sql);
 			Pstmt.setString(1, user.getUserid());
 			Pstmt.setString(2, user.getUserpassword());
@@ -164,7 +176,6 @@ public class UserDAO implements Secret {
 				u.setUserpassword(rs.getString("password"));
 				u.setUserdate(rs.getDate("created_at"));
 				u.setUserage(rs.getInt("age"));
-				u.setUserhobby(rs.getString("hobby"));
 				u.setUseruuid(rs.getString("uuid"));
 			} else {
 				return null;
@@ -177,11 +188,10 @@ public class UserDAO implements Secret {
 	}
 
 	public UserVO getUserVOFromUUID(UserVO user) {
-
-		UserVO u = new UserVO();
-
+		UserVO u =null;
 		try {
-			String sql = "select user_id,username,email,password,created_at,age,hobby from user where uuid = ?";
+			String sql = "SELECT u.user_id, u.username, u.email, u.password, u.created_at, u.age, GROUP_CONCAT(uh.hobby) AS hobbies FROM `user` u LEFT JOIN userhobby uh ON u.user_id = uh.user_id where u.uuid = ? GROUP BY u.user_id";
+			Pstmt = conn.prepareStatement(sql);
 			Pstmt.setString(1, user.getUseruuid());
 
 			ResultSet rs = Pstmt.executeQuery();
@@ -192,7 +202,7 @@ public class UserDAO implements Secret {
 				u.setUserpassword(rs.getString("password"));
 				u.setUserdate(rs.getDate("created_at"));
 				u.setUserage(rs.getInt("age"));
-				u.setUserhobby(rs.getString("hobby"));
+				u.setUserhobby(rs.getString("hobbies"));
 			}
 			rs.close();
 
@@ -200,6 +210,38 @@ public class UserDAO implements Secret {
 			e.printStackTrace();
 		}
 		return u;
+	}
+
+	public void updateUUID(UserVO userVO) {
+		int updated = 0;
+		try {
+			String sql = "update user set uuid=? where user_id = ?";
+			Pstmt = conn.prepareStatement(sql);
+			Pstmt.setString(1, userVO.getUseruuid());
+			Pstmt.setString(2, userVO.getUserid());
+			Pstmt.executeUpdate();
+			System.out.println("ok uuid updated");
+		
+		}catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+	}
+
+	public List<String> hobbyList() {
+		List<String> list = new ArrayList<String>();
+		try {
+			String sql = "Select hobbyname from tbhobby";
+			Pstmt = conn.prepareStatement(sql);
+			rs = Pstmt.executeQuery();
+			while(rs.next()) {
+				list.add(rs.getString("hobbyname"));
+			}
+			rs.close();
+		}catch(SQLException e) {
+			
+		}
+		return list;
 	}
 
 }

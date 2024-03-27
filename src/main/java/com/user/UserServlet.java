@@ -78,12 +78,13 @@ public class UserServlet extends HttpServlet {
 		case "delete" -> userController.delete(request, userVO);
 		case "updateForm" -> userController.updateForm(request, userVO);
 		case "update" -> userController.update(request, userVO);
-		case "insertForm" -> userController.insertForm(request);
+		case "insertForm" -> userController.insertForm(request, userVO);
 		case "insert" -> userController.insert(request, userVO);
 		case "loginForm" -> userController.loginForm(request);
 		case "login" -> userController.login(request, userVO,response);
-		case "logout" -> userController.logout(request);
-		//case "mypage" -> userController.mypage(request, userVO);
+		case "logout" -> userController.logout(request,response);
+		case "mypage" -> userController.mypage(request, userVO);
+		case "mypagehome" -> userController.mypagehome(request, userVO);
 		default -> "";
 		};
 		if (result instanceof Map map) {

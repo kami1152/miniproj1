@@ -35,7 +35,6 @@
 				<th>userpassword</th>
 				<th>useremail</th>
 				<th>userage</th>
-				<th>userhobby</th>
 				<th>userdate</th>
 			</tr>
 
@@ -49,8 +48,6 @@
 					value="${user.useremail}"></td>
 				<td><input type="text" id="userage" name="userage"
 					value="${user.userage}"></td>
-				<td><input type="text" id="userhobby" name="userhobby"
-					value="${user.userhobby}"></td>
 				<td>${user.userdate}</td>
 			</tr>
 		</table>

@@ -68,10 +68,12 @@ public class LoginFilter extends HttpFilter implements Filter {
 			actionSet.add("insert");
 
 			System.out.println("url = " + url);
-			if (!(url.equals("/miniproject1/user.do") && actionSet.contains(action))) {
+			if (!((url.equals("/miniproject1/board.do") || url.equals("/miniproject1/user.do"))&& actionSet.contains(action))) {
 				if (loginVO == null) {
+					System.out.println("99");
 					Cookie[] cookies = req.getCookies();
 					if (cookies != null) {
+						System.out.println("95");
 						for (Cookie cookie : cookies) {
 							if (cookie.getName().equals("uuidCookie")) {
 								// 2. uuid값을 이용하여 로그인 정보를 얻는다
@@ -81,7 +83,6 @@ public class LoginFilter extends HttpFilter implements Filter {
 								// 3. 로그인 정보를 세션에 기록한다
 								if (loginVO != null) {
 									session.setAttribute("loginVO", loginVO);
-
 									chain.doFilter(request, response);
 								} else {
 									resp.sendRedirect(req.getContextPath() + "/user.do?action=loginForm");
@@ -91,6 +92,7 @@ public class LoginFilter extends HttpFilter implements Filter {
 						}
 					}
 					resp.sendRedirect(req.getContextPath() + "/user.do?action=loginForm");
+					
 					return;
 				}
 			}

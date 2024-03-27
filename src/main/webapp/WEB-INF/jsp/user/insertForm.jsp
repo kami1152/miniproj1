@@ -92,12 +92,12 @@
 			</tr>
 		</table>
 		<div class="hobby_box">
-			<label style="margin-right: 10px;">취미 : </label> <input type="radio"
-				id="userhobby" name="userhobby" value="축구"><label for="축구">축구</label>
-			<input type="radio" id="userhobby" name="userhobby" value="게임"><label
-				for="게임">게임</label> <input type="radio" id="userhobby"
-				name="userhobby" value="영화"><label for="영화">영화</label>
+			<c:forEach var="hobby" items="${hobbylist}">
+				<label>${hobby}:</label> 
+				<input style="margin-right: 10px;" type="checkbox" id="${hobby}" name="userhobbies" value="${hobby}">
+			</c:forEach>
 		</div>
+
 		<br>
 		<button type="submit" class="custom-button">확인</button>
 		<button type="button" onclick="redirectToUserPage('${user.userid}')"
@@ -111,8 +111,10 @@
 	<script type="text/javascript">
 const rForm = document.getElementById("rForm");
 rForm.addEventListener("submit" , e=> {
-	e.preventDefault();
+	
 
+	//e.preventDefault();
+/*
 	myFetch("user.do", "rForm", json => {
 		if(json.status == 0){
 			alert("ok");
@@ -121,6 +123,7 @@ rForm.addEventListener("submit" , e=> {
 			alert(json.statusMessage);
 		}
 	});
+*/
 });
 
 function redirectToUserPage(userid){

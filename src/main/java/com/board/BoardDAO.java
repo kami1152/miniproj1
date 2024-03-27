@@ -67,11 +67,18 @@ public class BoardDAO implements Secret {
 				board.setBtitle(rs.getString("btitle"));
 				board.setBwriter(rs.getString("bwriter"));
 				board.setBdate(rs.getDate("bdate"));
-				board.setViews(rs.getInt("views"));
+				board.setViews(rs.getInt("views")+1);
 				board.setRecommend(rs.getInt("recommend_count"));
 			}else {
 				return null;
 			}
+			
+			String sql2 = "update board set views =? where bno =?";
+			Pstmt = conn.prepareStatement(sql2);
+			Pstmt.setInt(1, board.getViews());
+			Pstmt.setInt(2, board.getBno());
+			Pstmt.executeUpdate();
+			rs.close();
 		}catch (SQLException e) {
 			e.printStackTrace();
 		}

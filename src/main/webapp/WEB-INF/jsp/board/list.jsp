@@ -15,13 +15,14 @@
 		<div id="navigation2"></div>
 		<label>로그인 유저 : ${loginVO.username}</label>
 	</c:if>
-		<c:if test="${loginVO.username == null}">
+	<c:if test="${loginVO.username == null}">
 		<div id="navigation"></div>
 	</c:if>
 
 	<h1>게시글목록</h1>
 
-	<form id="searchForm" action="board.do" method="get" style="margin-bottom: 20px;">
+	<form id="searchForm" action="board.do" method="get"
+		style="margin-bottom: 20px;">
 		<label>검색 : </label> <input type="text" id="searchKey"
 			name="searchKey" value="${param.searchKey}"> <input
 			type="submit" value="검색">
@@ -52,34 +53,38 @@
 			</tr>
 		</c:forEach>
 	</table>
-	
-	
+
+
 	<form id="insertForm" method="post" action="board.do">
 		<input type="hidden" id="action" name="action" value="insertForm">
-		<input type="button" value="등록" onclick="jsinsertForm()"class="custom-button">
+		<input type="button" value="등록"
+			onclick="jsinsertForm('${loginVO.userid}')" class="custom-button">
 	</form>
-	
-	
+
+
 
 	<script type="text/javascript" src="<c:url value='/js/common.js'/>"></script>
-	
-	
+
+
 	<script>
-function jsView(uid) {
-	//인자의 값을 설정한다 
-	bno.value = uid;
-	
-	//양식을 통해서 서버의 URL로 값을 전달한다
-	listForm.submit();
-	
-}
+		function jsView(uid) {
+			//인자의 값을 설정한다 
+			bno.value = uid;
 
-function jsinsertForm(){
-	insertForm.submit();
-}
+			//양식을 통해서 서버의 URL로 값을 전달한다
+			listForm.submit();
 
+		}
 
-</script>
+		function jsinsertForm(userid) {
+			
+			if (userid != null) {
+				insertForm.submit();
+			} else{
+				alert("로그인이 필요한 서비스 입니다.");
+			}
+		}
+	</script>
 
 </body>
 </html>
