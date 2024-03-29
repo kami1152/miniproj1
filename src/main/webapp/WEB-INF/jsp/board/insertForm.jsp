@@ -58,24 +58,18 @@ body {
 
 </head>
 <body>
-	<c:if test="${loginVO.username != null}">
-		<div id="navigation2"></div>
-		<label>로그인 유저 : ${loginVO.username}</label>
-	</c:if>
-	<c:if test="${loginVO.username == null}">
-		<div id="navigation"></div>
-	</c:if>
+	<jsp:include page="../navbar.jsp"/>
 	<h2>게시글</h2>
 	<div class=board_box>
 		<form id="rForm" action="board.do" method="post">
 			<input type="hidden" name="action" value="insert"> <input
 				type="hidden" name="bno" value="${board.bno}">
 			<h2 class="post-title-box">
-				<label>제목 <textarea id="btitle" name="btitle"></textarea>
+				<label>제목 <textarea id="btitle" name="btitle" required="required"></textarea>
 				</label>
 			</h2>
 			<div class="post-content">
-				<textarea id="bcontent" name="bcontent"></textarea>
+				<textarea id="bcontent" name="bcontent" required="required"></textarea>
 			</div>
 			<button type="submit" class="custom-button">확인</button>
 			<button type="button" onclick="redirectToUserPage('${board.bno}')"

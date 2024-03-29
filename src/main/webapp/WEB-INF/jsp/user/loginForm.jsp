@@ -57,13 +57,7 @@
 
 </head>
 <body>
-<c:if test="${loginVO.username != null}">
-		<div id="navigation2"></div>
-		<label>로그인 유저 : ${loginVO.username}</label>
-	</c:if>
-	<c:if test="${loginVO.username == null}">
-		<div id="navigation"></div>
-	</c:if>
+	<jsp:include page="../navbar.jsp"/>
 	<h2>로그인</h2>
 	<form id="rForm" action="user.do" method="post">
 		<input type="hidden" id="action" name="action" value="login">

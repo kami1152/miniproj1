@@ -17,13 +17,7 @@
 
 </head>
 <body>
-	<c:if test="${loginVO.username != null}">
-		<div id="navigation2"></div>
-		<label>로그인 유저 : ${loginVO.username}</label>
-	</c:if>
-	<c:if test="${loginVO.username == null}">
-		<div id="navigation"></div>
-	</c:if>
+		<jsp:include page="../navbar.jsp"/>
 	<h2>회원 수정 화면</h2>
 	<form id="rForm" action="user.do" method="post">
 		<input type="hidden" name="action" value="update"> <input
@@ -51,6 +45,13 @@
 				<td>${user.userdate}</td>
 			</tr>
 		</table>
+			<div class="hobby_box">
+			<input type="hidden" id="userhobbies" name="userhobbies" value="-1">
+			<c:forEach var="hobby" items="${hobbylist}">
+				<label>${hobby}:</label> 
+				<input style="margin-right: 10px;" type="checkbox" id="${hobby}" name="userhobbies" value="${hobby}">
+			</c:forEach>
+		</div>
 		<button type="submit" class="custom-button">확인</button>
 		<button type="button" onclick="redirectToUserPage('${user.userid}')"
 			class="custom-button">취소</button>

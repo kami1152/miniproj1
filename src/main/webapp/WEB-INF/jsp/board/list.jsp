@@ -11,18 +11,12 @@
 <link rel="stylesheet" type="text/css" href="style.css">
 </head>
 <body>
-	<c:if test="${loginVO.username != null}">
-		<div id="navigation2"></div>
-		<label>로그인 유저 : ${loginVO.username}</label>
-	</c:if>
-	<c:if test="${loginVO.username == null}">
-		<div id="navigation"></div>
-	</c:if>
-
-	<h1>게시글목록</h1>
+	<jsp:include page="../navbar.jsp"/>
+	<h1>게시글 목록</h1>
 
 	<form id="searchForm" action="board.do" method="get"
 		style="margin-bottom: 20px;">
+		<input type="hidden" id="action" name="action" value="search"> 
 		<label>검색 : </label> <input type="text" id="searchKey"
 			name="searchKey" value="${param.searchKey}"> <input
 			type="submit" value="검색">

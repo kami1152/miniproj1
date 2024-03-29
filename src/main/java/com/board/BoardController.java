@@ -20,7 +20,10 @@ public class BoardController {
 	}
 
 	public Object view(HttpServletRequest request, BoardVO board) {
-		request.setAttribute("board", boardService.view(board));
+		HttpSession session = request.getSession();
+		UserVO loginVO = (UserVO) session.getAttribute("loginVO");
+		BoardVO boardVO = boardService.view(board, loginVO);
+		request.setAttribute("board", boardVO);
 		return "view";
 	}
 
@@ -41,7 +44,7 @@ public class BoardController {
 
 	public Object updateForm(HttpServletRequest request, BoardVO boardVO) {
 
-		request.setAttribute("board", boardService.view(boardVO));
+		request.setAttribute("board", boardService.read(boardVO) );
 		return "updateForm";
 	}
 

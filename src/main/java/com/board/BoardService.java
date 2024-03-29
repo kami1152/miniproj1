@@ -2,14 +2,23 @@ package com.board;
 
 import java.util.List;
 
+import com.user.UserVO;
+
 public class BoardService {
 
 	BoardDAO boardDAO = new BoardDAO();
 	public List<BoardVO> list() {
 		return boardDAO.list();
 	}
-	public BoardVO view(BoardVO board) {
-		BoardVO b = boardDAO.view(board.getBno());
+	public BoardVO view(BoardVO board, UserVO user) {
+		BoardVO b = boardDAO.view(board.getBno(), user);
+		System.out.println(b);
+		System.out.println(user);
+		return b;
+	}
+	
+	public BoardVO read(BoardVO board) {
+		BoardVO b = boardDAO.read(board.getBno());
 		System.out.println(b);
 		return b;
 	}

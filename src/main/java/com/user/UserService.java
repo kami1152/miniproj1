@@ -34,7 +34,7 @@ public class UserService {
 
 	public UserVO login(UserVO user) {
 		UserVO u = userDAO.login(user);
-		if(u.getUserid() == null) {
+		if(u == null) {
 			return null;
 		}
 		return u;
@@ -49,9 +49,13 @@ public class UserService {
 	public List<String> insertForm() {
 		
 		return userDAO.hobbyList();
-		
-		
-		
+	}
+
+	public boolean existUserId(UserVO userVO) {
+		if(!userDAO.idcheck(userVO)) {
+			return false;
+		}
+		return true;
 	}
 
 }

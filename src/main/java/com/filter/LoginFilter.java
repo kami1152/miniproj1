@@ -51,7 +51,7 @@ public class LoginFilter extends HttpFilter implements Filter {
 			throws IOException, ServletException {
 		// 사용자가 요청한 URL 얻기
 		System.out.println("filter operation");
-		
+		request.setCharacterEncoding("utf-8");
 		if (request instanceof HttpServletRequest req) {
 			HttpServletResponse resp = (HttpServletResponse) response;
 			HttpSession session = req.getSession();
@@ -59,13 +59,14 @@ public class LoginFilter extends HttpFilter implements Filter {
 			String contentType = request.getContentType();
 			String url = req.getRequestURI();
 			String action = req.getParameter("action");
-			System.out.println("actions : " + action);
+			System.out.println("action : " + action);
 			Set<String> actionSet = new HashSet<String>();
 
 			actionSet.add("loginForm");
 			actionSet.add("login");
 			actionSet.add("insertForm");
 			actionSet.add("insert");
+			actionSet.add("existUserId");
 
 			System.out.println("url = " + url);
 			if (!((url.equals("/miniproject1/board.do") || url.equals("/miniproject1/user.do"))&& actionSet.contains(action))) {

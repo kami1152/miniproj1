@@ -85,6 +85,7 @@ public class UserServlet extends HttpServlet {
 		case "logout" -> userController.logout(request,response);
 		case "mypage" -> userController.mypage(request, userVO);
 		case "mypagehome" -> userController.mypagehome(request, userVO);
+		case "existUserId" -> userController.existUserId(request, userVO);
 		default -> "";
 		};
 		if (result instanceof Map map) {

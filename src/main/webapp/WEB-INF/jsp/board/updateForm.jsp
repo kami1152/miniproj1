@@ -58,13 +58,7 @@ body {
 
 </head>
 <body>
-	<c:if test="${loginVO.username != null}">
-		<div id="navigation2"></div>
-		<label>로그인 유저 : ${loginVO.username}</label>
-	</c:if>
-	<c:if test="${loginVO.username == null}">
-		<div id="navigation"></div>
-	</c:if>
+	<jsp:include page="../navbar.jsp"/>
 	<h2>게시글</h2>
 	<div class=board_box>
 		<form id="rForm" action="board.do" method="post">

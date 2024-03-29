@@ -1,7 +1,9 @@
 package com.user;
 
+import java.io.IOException;
 import java.util.*;
 
+import javax.servlet.ServletException;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -41,6 +43,8 @@ public class UserController {
 
 	public Object updateForm(HttpServletRequest request, UserVO user) {
 		request.setAttribute("user", userService.view(user));
+		List<String> list = userService.insertForm();
+		request.setAttribute("hobbylist", list);
 		return "updateForm";
 	}
 
@@ -73,7 +77,7 @@ public class UserController {
 		if(res == 1) {
 			return "redirect:board.do?action=list";	
 		}else {
-			return "redirect:user.do?action=lnsertForm&err=invalidUserId";
+			return "lnsertForm";
 		}
 		
 	}
@@ -88,7 +92,7 @@ public class UserController {
 		Map<String, Object> map = new HashMap<>();
 		UserVO loginVO = userService.login(userVO);
 		System.out.println(loginVO);
-		if (loginVO.getUserid() == null) {
+		if (loginVO == null) {
 			map.put("status", -99);
 			map.put("statusMessage", "로그인에 실패하였습니다");
 		} else {
@@ -141,5 +145,20 @@ public class UserController {
 		request.setAttribute("user", userService.view(userVO));
 		return "mypagehome";
 	}
+	public Object existUserId(HttpServletRequest request, UserVO userVO) throws ServletException, IOException {
+		// 1. 처리
+		System.out.println("existUserId userid->" + userVO.getUserid());
+		boolean existUser = userService.existUserId(userVO);
+		Map<String, Object> map = new HashMap<>();
+		System.out.println(existUser);
+
+		if (existUser) { // 사용가능한 아이디
+			map.put("existUser", false);
+		} else { // 사용 불가능 아아디
+			map.put("existUser", true);
+		}
+		return map;
+	}
+
 
 }

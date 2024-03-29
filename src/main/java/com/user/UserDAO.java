@@ -86,6 +86,11 @@ public class UserDAO implements Secret {
 	public int delete(UserVO user) {
 		int res = 0;
 		try {
+			String sql2 = "delete from userhobby where user_id=?";
+			Pstmt = conn.prepareStatement(sql2);
+			Pstmt.setString(1, user.getUserid());
+			res = Pstmt.executeUpdate();
+			
 			String sql = "delete from user where user_id=?";
 			Pstmt = conn.prepareStatement(sql);
 			Pstmt.setString(1, user.getUserid());
@@ -107,8 +112,31 @@ public class UserDAO implements Secret {
 			Pstmt.setString(2, user.getUserpassword());
 			Pstmt.setString(3, user.getUseremail());
 			Pstmt.setInt(4, user.getUserage());
-			Pstmt.setString(6, user.getUserid());
+			Pstmt.setString(5, user.getUserid());
 			res = Pstmt.executeUpdate();
+			
+			
+			String sql5 = "delete from userhobby where user_id=?";
+			Pstmt = conn.prepareStatement(sql5);
+			Pstmt.setString(1, user.getUserid());
+			Pstmt.executeUpdate();
+			
+			
+			if (user.getUserhobbies() != null) {
+				Queue<String> hobbies = user.getUserhobbies();
+				while (!hobbies.isEmpty()) {
+					String sql2 = "insert into userhobby (user_id, hobby) values (?,?)";
+					String hobby = hobbies.poll();
+					Pstmt = conn.prepareStatement(sql2);
+					Pstmt.setString(1, user.getUserid());
+					Pstmt.setString(2, hobby);
+					Pstmt.executeUpdate();
+				}
+			}
+			String sql3 = "DELETE FROM userhobby WHERE user_id = ? AND hobby IN ('-1', '-2')";
+			Pstmt= conn.prepareStatement(sql3);
+			Pstmt.setString(1, user.getUserid());
+			Pstmt.executeUpdate();
 
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -128,19 +156,27 @@ public class UserDAO implements Secret {
 			Pstmt.setString(4, user.getUserpassword());
 			Pstmt.setInt(5, user.getUserage());
 			res = Pstmt.executeUpdate();
-			Queue<String> hobbies = user.getUserhobbies();
-			String sql2 = "insert into userhobby (user_id, hobby) values (?,?)";
-			while(!hobbies.isEmpty()) {
-				String hobby = hobbies.poll();
-				Pstmt = conn.prepareStatement(sql2);
-				Pstmt.setString(1, user.getUserid());
-				Pstmt.setString(2, hobby);
-				Pstmt.executeUpdate();
+			if (user.getUserhobbies() != null) {
+				Queue<String> hobbies = user.getUserhobbies();
+				while (!hobbies.isEmpty()) {
+					String sql2 = "insert into userhobby (user_id, hobby) values (?,?)";
+					String hobby = hobbies.poll();
+					Pstmt = conn.prepareStatement(sql2);
+					Pstmt.setString(1, user.getUserid());
+					Pstmt.setString(2, hobby);
+					Pstmt.executeUpdate();
+				}
 			}
+			String sql3 = "DELETE FROM userhobby WHERE user_id = ? AND hobby IN ('-1', '-2')";
+			Pstmt= conn.prepareStatement(sql3);
+			Pstmt.setString(1, user.getUserid());
+			Pstmt.executeUpdate();
+			
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 
+		System.out.println(res);
 		return res;
 	}
 
@@ -151,6 +187,7 @@ public class UserDAO implements Secret {
 			Pstmt.setString(1, user.getUserid());
 			rs = Pstmt.executeQuery();
 			if (rs.next()) {
+				System.out.println("아이디 존재");
 				return false;
 			}
 		} catch (SQLException e) {
@@ -188,7 +225,7 @@ public class UserDAO implements Secret {
 	}
 
 	public UserVO getUserVOFromUUID(UserVO user) {
-		UserVO u =null;
+		UserVO u = null;
 		try {
 			String sql = "SELECT u.user_id, u.username, u.email, u.password, u.created_at, u.age, GROUP_CONCAT(uh.hobby) AS hobbies FROM `user` u LEFT JOIN userhobby uh ON u.user_id = uh.user_id where u.uuid = ? GROUP BY u.user_id";
 			Pstmt = conn.prepareStatement(sql);
@@ -221,11 +258,11 @@ public class UserDAO implements Secret {
 			Pstmt.setString(2, userVO.getUserid());
 			Pstmt.executeUpdate();
 			System.out.println("ok uuid updated");
-		
-		}catch (SQLException e) {
+
+		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		
+
 	}
 
 	public List<String> hobbyList() {
@@ -234,12 +271,12 @@ public class UserDAO implements Secret {
 			String sql = "Select hobbyname from tbhobby";
 			Pstmt = conn.prepareStatement(sql);
 			rs = Pstmt.executeQuery();
-			while(rs.next()) {
+			while (rs.next()) {
 				list.add(rs.getString("hobbyname"));
 			}
 			rs.close();
-		}catch(SQLException e) {
-			
+		} catch (SQLException e) {
+
 		}
 		return list;
 	}

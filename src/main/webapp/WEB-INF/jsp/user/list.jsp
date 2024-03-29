@@ -11,14 +11,7 @@
 <link rel="stylesheet" type="text/css" href="style.css">
 </head>
 <body>
-
-	<c:if test="${loginVO.username != null}">
-		<div id="navigation2"></div>
-		<label>로그인 유저 : ${loginVO.username}</label>
-	</c:if>
-	<c:if test="${loginVO.username == null}">
-		<div id="navigation"></div>
-	</c:if>
+	<jsp:include page="../navbar.jsp"/>
 	<h1>회원목록</h1>
 
 	<form id="searchForm" action="user.do" method="get"

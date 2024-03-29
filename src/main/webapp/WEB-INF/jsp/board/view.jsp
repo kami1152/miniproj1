@@ -38,13 +38,7 @@ body {
 
 </head>
 <body>
-	<c:if test="${loginVO.username != null}">
-		<div id="navigation2"></div>
-		<label>로그인 유저 : ${loginVO.username}</label>
-	</c:if>
-	<c:if test="${loginVO.username == null}">
-		<div id="navigation"></div>
-	</c:if>
+	<jsp:include page="../navbar.jsp" />
 	<h2>게시글</h2>
 	<label></label>
 	<div class=board_box>
@@ -66,15 +60,23 @@ body {
 		</div>
 	</div>
 
+	<c:if test="${loginVO.username != board.bwriter}">
+		<form id="viewForm" method="post" action="board.do">
+			<input type="button" value="목록" onclick="jsback()"
+				class="custom-button">
+		</form>
+	</c:if>
 
-	<form id="viewForm" method="post" action="board.do">
-		<input type="hidden" id="action" name="action" value=""> <input
-			type="hidden" id="bno" name="bno" value="${board.bno}"> <input
-			type="button" value="수정" onclick="jsUpdateForm()"
-			class="custom-button"> <input type="button" value="삭제"
-			onclick="jsDelete()" class="custom-button"> <input
-			type="button" value="목록" onclick="jsback()" class="custom-button">
-	</form>
+	<c:if test="${loginVO.username == board.bwriter}">
+		<form id="viewForm" method="post" action="board.do">
+			<input type="hidden" id="action" name="action" value=""> <input
+				type="hidden" id="bno" name="bno" value="${board.bno}"> <input
+				type="button" value="수정" onclick="jsUpdateForm()"
+				class="custom-button"> <input type="button" value="삭제"
+				onclick="jsDelete()" class="custom-button"> <input
+				type="button" value="목록" onclick="jsback()" class="custom-button">
+		</form>
+	</c:if>
 
 
 

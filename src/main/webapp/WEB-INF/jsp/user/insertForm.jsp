@@ -57,21 +57,14 @@
 
 </head>
 <body>
-
-	<c:if test="${loginVO.username != null}">
-		<div id="navigation2"></div>
-		<label>로그인 유저 : ${loginVO.username}</label>
-	</c:if>
-	<c:if test="${loginVO.username == null}">
-		<div id="navigation"></div>
-	</c:if>
+	<jsp:include page="../navbar.jsp"/>
 	<h2>회원 가입 화면</h2>
 	<form id="rForm" action="user.do" method="post">
 		<input type="hidden" name="action" value="insert">
 		<table border="1">
 			<tr>
-				<th style="text-align: center;">userid : <input type="button"
-					id="duplicateId" value="중복확인" class="dupbtn"></th>
+				<th style="text-align: center;">userid : 
+				<input type="button" id="duplicateId" name="duplicateId" value="중복확인" class="dupbtn"></th>
 				<th>username</th>
 				<th>userpassword</th>
 				<th>useremail</th>
@@ -96,6 +89,8 @@
 				<label>${hobby}:</label> 
 				<input style="margin-right: 10px;" type="checkbox" id="${hobby}" name="userhobbies" value="${hobby}">
 			</c:forEach>
+			<input type="hidden" name="userhobbies" value="-1">
+			<input type="hidden" name="userhobbies" value="-2">
 		</div>
 
 		<br>
@@ -109,10 +104,19 @@
 	<script type="text/javascript" src="<c:url value='/js/common.js'/>"></script>
 
 	<script type="text/javascript">
+	
+	let validUserId = "";
 const rForm = document.getElementById("rForm");
 rForm.addEventListener("submit" , e=> {
 	
-
+	
+	e.preventDefault();
+	/*
+	if (validUserId == "" || userid.value != validUserId) {
+		alert("아이디 중복확인 해주세요");
+		return false;
+	}*/
+	
 	//e.preventDefault();
 /*
 	myFetch("user.do", "rForm", json => {
@@ -142,15 +146,8 @@ duplicateId.addEventListener("click", () => {
 		userid.focus();
 		return;
 	}
-	const param = {
-		action : "existUserId",
-		userid : userid.value
-	}
-	fetch("user.do", {
-		method:"POST",
-		body:JSON.stringify(param),
-		headers : {"Content-type" : "application/json; charset=utf-8"}
-	}).then(res => res.json()).then(json => {
+	
+	fetch("user.do?action=existUserId&userid="+userid.value).then(res => res.json()).then(json => {
 		//서버로 부터 받은 결과를 사용해서 처리 루틴 구현  
 		console.log("json ", json );
 		if (json.existUser == true) {
@@ -161,6 +158,7 @@ duplicateId.addEventListener("click", () => {
 			validUserId = userid.value;
 		}
 	});
+
 });
 
 
