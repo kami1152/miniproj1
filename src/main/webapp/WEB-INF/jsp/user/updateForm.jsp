@@ -74,7 +74,7 @@ rForm.addEventListener("submit" , e=> {
 	myFetch("user.do", "rForm", json => {
 		if(json.status == 0){
 			alert("ok");
-			location = "user.do?action=list";
+			location = "board.do?action=list";
 		}else{
 			alert(json.statusMessage);
 		}
