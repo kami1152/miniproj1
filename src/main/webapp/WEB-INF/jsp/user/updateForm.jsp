@@ -34,13 +34,13 @@
 
 			<tr>
 				<td>${user.userid}</td>
-				<td><input type="text" id="username" name="username"
+				<td><input type="text" id="username" name="username" required="required"
 					value="${user.username}"></td>
-				<td><input type="text" id="userpassword" name="userpassword"
+				<td><input type="text" id="userpassword" name="userpassword" required="required"
 					value=""></td>
-				<td><input type="text" id="useremail" name="useremail"
+				<td><input type="text" id="useremail" name="useremail" required="required"
 					value="${user.useremail}"></td>
-				<td><input type="text" id="userage" name="userage"
+				<td><input type="text" id="userage" name="userage" required="required"
 					value="${user.userage}"></td>
 				<td>${user.userdate}</td>
 			</tr>

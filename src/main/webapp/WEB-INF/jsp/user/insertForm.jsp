@@ -57,14 +57,14 @@
 
 </head>
 <body>
-	<jsp:include page="../navbar.jsp"/>
+	<jsp:include page="../navbar.jsp" />
 	<h2>회원 가입 화면</h2>
-	<form id="rForm" action="user.do" method="post">
+	<form id="rForm" action="user.do" method="get">
 		<input type="hidden" name="action" value="insert">
 		<table border="1">
 			<tr>
-				<th style="text-align: center;">userid : 
-				<input type="button" id="duplicateId" name="duplicateId" value="중복확인" class="dupbtn"></th>
+				<th style="text-align: center;">userid : <input type="button"
+					id="duplicateId" name="duplicateId" value="중복확인" class="dupbtn"></th>
 				<th>username</th>
 				<th>userpassword</th>
 				<th>useremail</th>
@@ -86,15 +86,16 @@
 		</table>
 		<div class="hobby_box">
 			<c:forEach var="hobby" items="${hobbylist}">
-				<label>${hobby}:</label> 
-				<input style="margin-right: 10px;" type="checkbox" id="${hobby}" name="userhobbies" value="${hobby}">
+				<label>${hobby}:</label>
+				<input style="margin-right: 10px;" type="checkbox" id="${hobby}"
+					name="userhobbies" value="${hobby}">
 			</c:forEach>
-			<input type="hidden" name="userhobbies" value="-1">
-			<input type="hidden" name="userhobbies" value="-2">
+			<input type="hidden" name="userhobbies" value="-1"> <input
+				type="hidden" name="userhobbies" value="-2">
 		</div>
 
 		<br>
-		<button type="submit" class="custom-button">확인</button>
+		<button type="button" onclick="gos()" class="custom-button">확인</button>
 		<button type="button" onclick="redirectToUserPage('${user.userid}')"
 			class="custom-button">취소</button>
 
@@ -104,30 +105,24 @@
 	<script type="text/javascript" src="<c:url value='/js/common.js'/>"></script>
 
 	<script type="text/javascript">
+
+function gos(){
+	rForm.submit();
+}
 	
-	let validUserId = "";
+ var validUserId = "";
 const rForm = document.getElementById("rForm");
 rForm.addEventListener("submit" , e=> {
 	
 	
 	e.preventDefault();
-	/*
+	
 	if (validUserId == "" || userid.value != validUserId) {
 		alert("아이디 중복확인 해주세요");
 		return false;
-	}*/
-	
-	//e.preventDefault();
-/*
-	myFetch("user.do", "rForm", json => {
-		if(json.status == 0){
-			alert("ok");
-			location = "user.do?action=list";
-		}else{
-			alert(json.statusMessage);
-		}
-	});
-*/
+	}
+	console.log("sub !")
+	return true;
 });
 
 function redirectToUserPage(userid){

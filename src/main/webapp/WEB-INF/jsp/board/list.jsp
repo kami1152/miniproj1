@@ -16,7 +16,7 @@
 
 	<form id="searchForm" action="board.do" method="get"
 		style="margin-bottom: 20px;">
-		<input type="hidden" id="action" name="action" value="search"> 
+		<input type="hidden" id="action" name="action" value="search "> 
 		<label>검색 : </label> <input type="text" id="searchKey"
 			name="searchKey" value="${param.searchKey}"> <input
 			type="submit" value="검색">

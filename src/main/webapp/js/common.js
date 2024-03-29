@@ -26,7 +26,6 @@ const formToSerialize = (formId) => JSON.stringify([].reduce.call(document.query
 	 )
 );
 
-
 const myFetch = (url, formId, handler) => {
 	const param = typeof formId == "string" ? formToSerialize(formId) : JSON.stringify(formId);
 	fetch(url, {
