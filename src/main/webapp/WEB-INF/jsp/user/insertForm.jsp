@@ -107,6 +107,10 @@
 	<script type="text/javascript">
 
 function gos(){
+	if (validUserId == "" || userid.value != validUserId) {
+		alert("아이디 중복확인 해주세요");
+		return false;
+	}
 	rForm.submit();
 }
 	

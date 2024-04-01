@@ -7,8 +7,8 @@ import com.user.UserVO;
 public class BoardService {
 
 	BoardDAO boardDAO = new BoardDAO();
-	public List<BoardVO> list() {
-		return boardDAO.list();
+	public List<BoardVO> list(BoardVO board) {
+		return boardDAO.list(board);
 	}
 	public BoardVO view(BoardVO board, UserVO user) {
 		BoardVO b = boardDAO.view(board.getBno(), user);

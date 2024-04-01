@@ -14,12 +14,11 @@
 	<jsp:include page="../navbar.jsp"/>
 	<h1>게시글 목록</h1>
 
-	<form id="searchForm" action="board.do" method="get"
-		style="margin-bottom: 20px;">
-		<input type="hidden" id="action" name="action" value="search "> 
-		<label>검색 : </label> <input type="text" id="searchKey"
-			name="searchKey" value="${param.searchKey}"> <input
-			type="submit" value="검색">
+	<form id="searchForm" action="board.do" method="get" style="margin-bottom: 20px;">
+		<input type="hidden" id="action" name="action" value="list"> 
+		<label>검색 : </label>
+		<input type="text" id="searchKey" name="searchKey" value="${param.searchKey}"> 
+		<input type="button" onclick="jssearch('${param.searchKey}')" value="검색" > </button> 
 	</form>
 
 	<form id="listForm" action="board.do" method="post">
@@ -67,6 +66,14 @@
 
 			//양식을 통해서 서버의 URL로 값을 전달한다
 			listForm.submit();
+
+		}
+		function jssearch(searchs) {
+			//인자의 값을 설정한다 
+			
+
+			//양식을 통해서 서버의 URL로 값을 전달한다
+			searchForm.submit();
 
 		}
 

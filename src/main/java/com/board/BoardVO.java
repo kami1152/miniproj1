@@ -17,6 +17,13 @@ public class BoardVO {
 	private int views;
 	private int recommend;
 	
+	private String searchKey;
+	
 	private String action;
+	
+	public boolean isEmptySearchKey() {
+		return searchKey == null || searchKey.length() == 0; 
+	}
+
 
 }

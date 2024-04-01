@@ -13,7 +13,7 @@ public class BoardController {
 	
 	public Object list(HttpServletRequest request, BoardVO boardVO) {
 		System.out.println("Board list loading");
-		List<BoardVO> list = boardService.list();
+		List<BoardVO> list = boardService.list(boardVO);
 		HttpSession session = request.getSession();
 		request.setAttribute("list", list);
 		return "list";
@@ -64,9 +64,9 @@ public class BoardController {
 	public Object insertForm(HttpServletRequest request) {
 		HttpSession session = request.getSession();
 		UserVO loginVO = (UserVO) session.getAttribute("loginVO");
-		
+		BoardVO board =null;
 		if(loginVO.getUserid() == null) {
-			List<BoardVO> list = boardService.list();
+			List<BoardVO> list = boardService.list(board);
 			request.setAttribute("list", list);
 			request.setAttribute("msg", "로그인이 필요한 서비스입니다");
 			return "list";

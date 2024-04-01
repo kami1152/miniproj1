@@ -28,12 +28,20 @@ public class BoardDAO implements Secret {
 		}
 	}
 
-	public List<BoardVO> list() {
+	public List<BoardVO> list(BoardVO boardVO) {
 		List<BoardVO> list = new ArrayList<BoardVO>();
 		try {
-			String sql = "select bno, btitle,bwriter,bdate,views,recommend_count from board";
-			Pstmt = conn.prepareStatement(sql);
-			rs = Pstmt.executeQuery();
+			if (boardVO != null && !boardVO.isEmptySearchKey()) {
+				System.out.println("dd");
+				String sql = "SELECT * FROM board WHERE btitle LIKE ?";
+				Pstmt = conn.prepareStatement(sql);
+				Pstmt.setString(1, "%" + boardVO.getSearchKey() + "%");
+				rs = Pstmt.executeQuery();
+			} else {
+				String sql = "select bno, btitle,bwriter,bdate,views,recommend_count from board";
+				Pstmt = conn.prepareStatement(sql);
+				rs = Pstmt.executeQuery();
+			}
 			while (rs.next()) {
 				BoardVO board = new BoardVO();
 				board.setBno(rs.getInt("bno"));
@@ -97,7 +105,7 @@ public class BoardDAO implements Secret {
 				return null;
 			}
 			rs.close();
-			
+
 			if (user != null) {
 				boolean viewer = false;
 				System.out.println("어서와");
@@ -123,7 +131,7 @@ public class BoardDAO implements Secret {
 
 					sql = "update board set views = ? where bno = ?";
 					Pstmt = conn.prepareStatement(sql);
-					Pstmt.setInt(1, board.getViews()+1);
+					Pstmt.setInt(1, board.getViews() + 1);
 					Pstmt.setInt(2, bno);
 					Pstmt.executeUpdate();
 					board.setViews(board.getViews() + 1);
